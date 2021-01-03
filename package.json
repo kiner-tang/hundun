@@ -1,0 +1,35 @@
+{
+  "name": "hundun",
+  "version": "0.0.1",
+  "description": "混沌cli（混沌包容万物，乃万物之始），本项目用于将管理任意github项目，通过cli操作的方式，基于目标github创建新项目",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsc ./src/bin/main.ts --watch",
+    "build": "cp -rf ./src ./output & tsc"
+  },
+  "bin": {
+    "hundun": "./output/bin/main.js",
+    "hd": "./output/bin/main.js"
+  },
+  "author": "kiner",
+  "license": "ISC",
+  "dependencies": {
+    "@types/commander": "^2.12.2",
+    "@types/inquirer": "^6.0.3",
+    "@types/node": "^12.0.4",
+    "@types/shelljs": "0.8.8",
+    "JSONPath": "0.11.2",
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "download-git-repo": "^2.0.0",
+    "fs-extra": "9.0.1",
+    "inquirer": "^6.3.1",
+    "ora": "^3.4.0",
+    "shelljs": "0.8.4",
+    "typescript": "^3.5.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "9.0.2",
+    "tslint": "^5.17.0"
+  }
+}

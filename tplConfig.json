@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Vue模版项目",
+    "value": "template-vue-ide",
+    "repository": "https://git.yy.com/webs/edu100FE/template-vue-ide.git",
+    "defaultBranch": "master"
+  },
+  {
+    "name": "纯Typescript模版项目",
+    "value": "template-typescript-ide",
+    "repository": "https://git.yy.com/webs/edu100FE/template-typescript-ide.git",
+    "defaultBranch": "master"
+  },
+  {
+    "name": "Typescript+React+NextStore模版项目",
+    "value": "template-react-ide",
+    "repository": "https://git.yy.com/webs/edu100FE/template-react-ide.git",
+    "defaultBranch": "master"
+  },
+  {
+    "name": "Typescript+Ant_Design模版项目",
+    "value": "template-antd-ide",
+    "repository": "https://git.yy.com/webs/edu100FE/template-antd-ide.git",
+    "defaultBranch": "master"
+  },
+  {
+    "name": "EggJs+Typescript模版项目",
+    "value": "template-eggjs-typscript-ide",
+    "repository": "https://git.yy.com/webs/edu100FE/template-eggjs-typscript-ide.git",
+    "defaultBranch": "master"
+  },
+  {
+    "name": "落地页模版项目",
+    "value": "template-landingpage-ide",
+    "repository": "https://git.yy.com/webs/edu100FE/template-landingpage-ide.git",
+    "defaultBranch": "master"
+  },
+  {
+    "name": "Typescript+React+Mobx模版项目",
+    "value": "template-react-ts-mobx-ide",
+    "repository": "https://git.yy.com/webs/edu100FE/template-react-ts-mobx-ide.git",
+    "defaultBranch": "master"
+  },
+  {
+    "name": "React管理后台模版",
+    "value": "template-oss-ide",
+    "repository": "https://git.yy.com/webs/edu100FE/template-oss-ide.git",
+    "defaultBranch": "master"
+  }
+]
