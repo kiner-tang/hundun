@@ -35,9 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
-exports.mergeJSON = exports.resolveArgs = exports.fetchTplConfig = exports.downloadDirFromGitLab = exports.installDependencies = exports.patchConf = exports.injectArg = exports.getSource = exports.patchPackageJSON = exports.copyFilesToTargetPath = exports.copyFileList = exports.switchGitBranch = exports.getGitBranchList = exports.resolveBranchList = exports.keywordRed = exports.keywordWhite = exports.keywordCyan = exports.keyword = void 0;
-var chalk_1 = require("chalk");
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mergeJSON = exports.resolveArgs = exports.fetchTplConfig = exports.installDependencies = exports.patchConf = exports.injectArg = exports.getSource = exports.patchPackageJSON = exports.copyFilesToTargetPath = exports.copyFileList = exports.switchGitBranch = exports.getGitBranchList = exports.resolveBranchList = exports.keywordRed = exports.keywordWhite = exports.keywordCyan = exports.keyword = void 0;
+var chalk_1 = __importDefault(require("chalk"));
 var config_1 = require("../config");
 var logger_1 = require("./logger");
 var add_1 = require("../command/add");
@@ -51,7 +54,7 @@ function keyword(color) {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        return chalk_1["default"].bold.keyword(color).apply(void 0, args);
+        return chalk_1.default.bold.keyword(color).apply(void 0, args);
     };
 }
 exports.keyword = keyword;
@@ -86,8 +89,7 @@ function copyFilesToTargetPath(fileList, targetPath) {
 }
 exports.copyFilesToTargetPath = copyFilesToTargetPath;
 function patchPackageJSON(projectRoot, originalPackage, config, extra) {
-    var realProjectName = config.sourceProjectName === "." ? "" : config.projectName;
-    var projectPath = path.join(projectRoot, realProjectName);
+    var projectPath = projectRoot;
     try {
         originalPackage.name = config.projectName;
         originalPackage.tplVersion = config.branch;
@@ -119,8 +121,7 @@ function injectArg(source, args) {
 }
 exports.injectArg = injectArg;
 function patchConf(projectRoot, config, updateConf) {
-    var realProjectName = config.sourceProjectName === "." ? "" : config.projectName;
-    var projectPath = path.join(projectRoot, realProjectName);
+    var projectPath = projectRoot;
     var fileList = Object.keys(updateConf);
     var args = config;
     Object.keys(updateConf).forEach(function (argsName) {
@@ -184,27 +185,6 @@ function installDependencies(projectRoot, pkgManager) {
     });
 }
 exports.installDependencies = installDependencies;
-function downloadDirFromGitLab(gitUrl, targetUrl, targetDir, branch) {
-    if (branch === void 0) { branch = "master"; }
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            if (os.type() === "Windows_NT") {
-                try {
-                    shell.exec(path.resolve(__dirname, "../supports/downloadDirFromGitLab.cmd") + " " + gitUrl + " " + targetUrl + " " + targetDir + " " + branch, { silent: true });
-                }
-                catch (e) {
-                    console.warn("执行cmd命令失败：", e);
-                }
-            }
-            else {
-                // 不支持提示
-                shell.exec("bash " + path.resolve(__dirname, "../supports/downloadDirFromGitLab.sh") + " " + gitUrl + " " + targetUrl + " " + targetDir + " " + branch, { silent: true });
-            }
-            return [2 /*return*/];
-        });
-    });
-}
-exports.downloadDirFromGitLab = downloadDirFromGitLab;
 function fetchTplConfig() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

@@ -46,7 +46,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.Create = void 0;
 var config_1 = require("../config");
 var DataCollection_1 = require("../lib/DataCollection");
@@ -63,26 +63,6 @@ var Create = /** @class */ (function () {
         this.alias = alias;
         this.projectName = projectName;
         this.dataSource = dataSource;
-        this.promptList = [
-            {
-                type: "input",
-                message: "请设置项目名称(当前目录则输入`.`):",
-                name: "projectName",
-                default: "test-project" // 默认值
-            },
-            {
-                type: "list",
-                message: "你使用的包管理工具",
-                name: "pkgManager",
-                choices: config_1.pkgManagers
-            },
-            {
-                type: "list",
-                message: "请选择你想要根据哪个模版创建项目",
-                name: "template",
-                choices: []
-            }
-        ];
         this.projectPath = shell.pwd().stdout;
         this.config = {
             projectName: "",
@@ -106,6 +86,7 @@ var Create = /** @class */ (function () {
                     case 0:
                         this.projectPath = path.join(this.projectPath, this.projectName);
                         conf = add_1.Add.getConfByAlia(this.alias);
+                        this.config.projectName = this.projectName;
                         if (!conf) {
                             logger_1.log.error("\u547D\u4EE4\uFF1A" + this.alias + "\u4E0D\u5B58\u5728");
                             return [2 /*return*/];
@@ -119,6 +100,9 @@ var Create = /** @class */ (function () {
                             // @ts-ignore
                             process.exit(0);
                         }
+                        return [4 /*yield*/, this.resolveBranchList(this.projectPath)];
+                    case 1:
+                        _a.sent();
                         promptList = [
                             {
                                 type: "list",
@@ -128,16 +112,24 @@ var Create = /** @class */ (function () {
                             }
                         ];
                         return [4 /*yield*/, this.dc.getData(promptList)];
-                    case 1:
-                        packageManager = _a.sent();
-                        return [4 /*yield*/, this.patchProject()];
                     case 2:
+                        packageManager = _a.sent();
+                        this.config.projectName = this.projectName;
+                        this.config.branch = 'master';
+                        this.config.template = conf.repositories;
+                        this.config.pkgManager = packageManager.pkgManager;
+                        return [4 /*yield*/, this.patchProject()];
+                    case 3:
                         _a.sent();
                         this.installDependencies(packageManager.pkgManager);
+                        this.rmGitFile();
                         return [2 /*return*/];
                 }
             });
         });
+    };
+    Create.prototype.rmGitFile = function () {
+        shell.rm('-rf', path.join(this.projectPath, '.git'));
     };
     // 从下载下来的项目中获取扩展配置
     Create.prototype.getExtendConfigFromProject = function () {
@@ -168,6 +160,34 @@ var Create = /** @class */ (function () {
     };
     Create.prototype.mergeOption = function (config) {
         this.config = __assign(__assign({}, this.config), config);
+    };
+    Create.prototype.resolveBranchList = function (projectRoot) {
+        return __awaiter(this, void 0, void 0, function () {
+            var branchList, promptList, config;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        branchList = utils_1.getGitBranchList(projectRoot);
+                        promptList = [
+                            {
+                                type: "list",
+                                message: "\u8BF7\u9009\u62E9\u8981\u4F7F\u7528\u54EA\u4E2A\u5206\u652F\u521B\u5EFA\u9879\u76EE",
+                                name: "branch",
+                                choices: branchList.map(function (item) { return ({
+                                    name: item,
+                                    value: item
+                                }); }),
+                                "default": "master"
+                            }
+                        ];
+                        return [4 /*yield*/, this.dc.getData(promptList)];
+                    case 1:
+                        config = _a.sent();
+                        this.mergeOption(config);
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     Create.prototype.patchProject = function () {
         return __awaiter(this, void 0, void 0, function () {

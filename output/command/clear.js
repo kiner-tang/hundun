@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Clear = void 0;
 var config_1 = require("../config");
 var logger_1 = require("../utils/logger");
@@ -44,7 +44,7 @@ var fs = require("fs-extra");
 var path = require("path");
 var Clear = /** @class */ (function () {
     function Clear() {
-        this.init()["catch"](function (e) { return logger_1.log.error("初始化异常", e); });
+        this.init().catch(function (e) { return logger_1.log.error("初始化异常", e); });
     }
     Clear.prototype.init = function () {
         return __awaiter(this, void 0, void 0, function () {

@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.List = void 0;
 var logger_1 = require("../utils/logger");
 var spinner_1 = require("../utils/spinner");
@@ -43,7 +43,7 @@ var utils_1 = require("../utils/utils");
 var add_1 = require("./add");
 var List = /** @class */ (function () {
     function List() {
-        this.init().catch(function (e) { return logger_1.log.error("初始化异常", e); });
+        this.init()["catch"](function (e) { return logger_1.log.error("初始化异常", e); });
     }
     List.prototype.init = function () {
         return __awaiter(this, void 0, void 0, function () {

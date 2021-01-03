@@ -35,12 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.mergeJSON = exports.resolveArgs = exports.fetchTplConfig = exports.downloadDirFromGitLab = exports.installDependencies = exports.patchConf = exports.injectArg = exports.getSource = exports.patchPackageJSON = exports.copyFilesToTargetPath = exports.copyFileList = exports.switchGitBranch = exports.getGitBranchList = exports.resolveBranchList = exports.keywordRed = exports.keywordWhite = exports.keywordCyan = exports.keyword = void 0;
-var chalk_1 = __importDefault(require("chalk"));
+var chalk_1 = require("chalk");
 var config_1 = require("../config");
 var logger_1 = require("./logger");
 var add_1 = require("../command/add");
@@ -54,7 +51,7 @@ function keyword(color) {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        return chalk_1.default.bold.keyword(color).apply(void 0, args);
+        return chalk_1["default"].bold.keyword(color).apply(void 0, args);
     };
 }
 exports.keyword = keyword;
@@ -89,8 +86,7 @@ function copyFilesToTargetPath(fileList, targetPath) {
 }
 exports.copyFilesToTargetPath = copyFilesToTargetPath;
 function patchPackageJSON(projectRoot, originalPackage, config, extra) {
-    var realProjectName = config.sourceProjectName === "." ? "" : config.projectName;
-    var projectPath = path.join(projectRoot, realProjectName);
+    var projectPath = projectRoot;
     try {
         originalPackage.name = config.projectName;
         originalPackage.tplVersion = config.branch;

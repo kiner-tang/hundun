@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Add = exports.confName = void 0;
 var config_1 = require("../config");
 var logger_1 = require("../utils/logger");

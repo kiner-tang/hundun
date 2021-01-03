@@ -1,11 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.tmpDir = exports.pkgManagers = exports.tplConfigFilePath = exports.tplConfigGitLabUrl = void 0;
-var os = require("os");
-var path = require("path");
-var fs = require("fs-extra");
-exports.tplConfigGitLabUrl = "https://git.yy.com/webs/edu100FE/template-manage-cli.git";
-exports.tplConfigFilePath = "tplConfig.json";
+import { ChoicesListItem } from "../lib/DataCollection";
+const os = require("os");
+const path = require("path");
+const fs = require("fs-extra");
+
+export const tplConfigGitLabUrl = "https://git.yy.com/webs/edu100FE/template-manage-cli.git";
+export const tplConfigFilePath = "tplConfig.json";
+
 // export const tplConfig: ChoicesListItem[] = [
 //     {
 //         name: "Vue模版项目",
@@ -32,7 +32,8 @@ exports.tplConfigFilePath = "tplConfig.json";
 //         defaultBranch: "master"
 //     }
 // ];
-exports.pkgManagers = [
+
+export const pkgManagers: ChoicesListItem[] =[
     {
         name: "yarn",
         value: "yarn"
@@ -50,8 +51,9 @@ exports.pkgManagers = [
         value: "cnpm"
     },
 ];
-var tmpProjectDir = "hundun-cli";
-exports.tmpDir = os.type() === 'Windows_NT' ? path.join("" + os.homedir(), ".tmp/" + tmpProjectDir) : path.join(os.tmpdir(), tmpProjectDir);
-if (!fs.existsSync(exports.tmpDir)) {
-    fs.mkdirpSync(exports.tmpDir);
+
+const tmpProjectDir = "hundun-cli";
+export const tmpDir = os.type() === 'Windows_NT'?path.join(`${os.homedir()}`,`.tmp/${tmpProjectDir}`):path.join(os.tmpdir(), tmpProjectDir);
+if(!fs.existsSync(tmpDir)){
+    fs.mkdirpSync(tmpDir);
 }

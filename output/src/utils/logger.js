@@ -6,7 +6,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.log = exports.Logger = exports.errorMsgStyle = exports.errorStyle = exports.warningMsgStyle = exports.warningStyle = exports.successMsgStyle = exports.successStyle = exports.infoMsgStyle = exports.infoStyle = exports.logStyle = void 0;
 var pak = require("../../package.json");
 var chalk = require('chalk');

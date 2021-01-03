@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.tmpDir = exports.pkgManagers = exports.tplConfigFilePath = exports.tplConfigGitLabUrl = void 0;
 var os = require("os");
 var path = require("path");
