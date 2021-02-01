@@ -51,7 +51,7 @@ exports.pkgManagers = [
     },
 ];
 var tmpProjectDir = "hundun-cli";
-exports.tmpDir = os.type() === 'Windows_NT' ? path.join("" + os.homedir(), ".tmp/" + tmpProjectDir) : path.join(os.tmpdir(), tmpProjectDir);
+exports.tmpDir = path.join("" + os.homedir(), ".tmp/" + tmpProjectDir);
 if (!fs.existsSync(exports.tmpDir)) {
     fs.mkdirpSync(exports.tmpDir);
 }
