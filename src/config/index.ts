@@ -1,4 +1,4 @@
-import {ChoicesListItem} from "../lib/DataCollection";
+import { ChoicesListItem } from "../lib/DataCollection";
 
 const os = require("os");
 const path = require("path");
