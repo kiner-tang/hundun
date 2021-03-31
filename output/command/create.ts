@@ -1,6 +1,5 @@
-import { pkgManagers, tmpDir } from "../config";
+import { pkgManagers } from "../config";
 import {
-    ChoicesListItem,
     Config,
     DataCollection,
     DataSource,
@@ -9,12 +8,8 @@ import {
 import { log, successMsgStyle } from "../utils/logger";
 import { failSpinner, logWithSpinner, stopSpinner } from "../utils/spinner";
 import {
-    copyFilesToTargetPath,
-    copyFileList,
-    fetchTplConfig,
     getGitBranchList,
     installDependencies,
-    keywordCyan,
     keywordWhite,
     mergeJSON,
     patchConf,
@@ -36,26 +31,6 @@ export interface ProjectExtendConfig {
 }
 
 export class Create {
-    private promptList: PromptListItem[] = [
-        {
-            type: "input",
-            message: "请设置项目名称(当前目录则输入`.`):",
-            name: "projectName",
-            default: "test-project" // 默认值
-        },
-        {
-            type: "list",
-            message: "你使用的包管理工具",
-            name: "pkgManager",
-            choices: pkgManagers
-        },
-        {
-            type: "list",
-            message: "请选择你想要根据哪个模版创建项目",
-            name: "template",
-            choices: []
-        }
-    ];
 
     private dc: DataCollection;
     private projectPath: string = shell.pwd().stdout;
@@ -81,6 +56,7 @@ export class Create {
 
         this.projectPath = path.join(this.projectPath, this.projectName);
         const conf = Add.getConfByAlia(this.alias);
+        this.config.projectName = this.projectName;
 
         if (!conf) {
             log.error(`命令：${ this.alias }不存在`);
@@ -97,6 +73,7 @@ export class Create {
             // @ts-ignore
             process.exit(0);
         }
+        await this.resolveBranchList(this.projectPath);
         const promptList: PromptListItem[] = [
             {
                 type: "list",
@@ -107,11 +84,21 @@ export class Create {
         ];
 
         const packageManager = await this.dc.getData(promptList);
+        this.config.projectName = this.projectName;
+        this.config.branch = 'master';
+        this.config.template = conf.repositories;
+        this.config.pkgManager = packageManager.pkgManager;
 
         await this.patchProject();
 
         this.installDependencies(packageManager.pkgManager);
 
+        this.rmGitFile();
+
+    }
+
+    private rmGitFile(){
+        shell.rm('-rf', path.join(this.projectPath, '.git'));
     }
 
     // 从下载下来的项目中获取扩展配置
@@ -139,6 +126,24 @@ export class Create {
             ...this.config,
             ...config
         };
+    }
+
+    public async resolveBranchList(projectRoot: string): Promise<void> {
+        const branchList = getGitBranchList(projectRoot);
+        const promptList: PromptListItem[] = [
+            {
+                type: "list",
+                message: `请选择要使用哪个分支创建项目`,
+                name: "branch",
+                choices: branchList.map((item: string) => ({
+                    name: item,
+                    value: item
+                })),
+                default: "master"
+            }
+        ];
+        const config = await this.dc.getData(promptList);
+        this.mergeOption(config);
     }
 
     public async patchProject(): Promise<void> {

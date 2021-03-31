@@ -80,7 +80,7 @@ var Create = /** @class */ (function () {
     }
     Create.prototype.init = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var conf, res, promptList, packageManager;
+            var conf, gitTmpDir, res, promptList, packageManager;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -91,16 +91,21 @@ var Create = /** @class */ (function () {
                             logger_1.log.error("\u547D\u4EE4\uFF1A" + this.alias + "\u4E0D\u5B58\u5728");
                             return [2 /*return*/];
                         }
-                        if (!fs.pathExistsSync(this.projectPath)) {
-                            fs.mkdirpSync(this.projectPath);
+                        gitTmpDir = config_1.tmpDir + "/" + this.projectName;
+                        if (!fs.pathExistsSync(gitTmpDir)) {
+                            fs.mkdirpSync(gitTmpDir);
                         }
-                        res = shell.cd(this.projectPath).exec("git clone " + conf.repositories + " .");
+                        else {
+                            shell.rm("-rf", "" + gitTmpDir);
+                            fs.mkdirpSync(gitTmpDir);
+                        }
+                        res = shell.cd(gitTmpDir).exec("git clone " + conf.repositories + " .");
                         if (res.code !== 0) {
                             spinner_1.failSpinner("\u514B\u9686\u6A21\u7248\u9879\u76EE[" + conf.name + "]\u5931\u8D25");
                             // @ts-ignore
                             process.exit(0);
                         }
-                        return [4 /*yield*/, this.resolveBranchList(this.projectPath)];
+                        return [4 /*yield*/, this.resolveBranchList(gitTmpDir)];
                     case 1:
                         _a.sent();
                         promptList = [
@@ -115,21 +120,25 @@ var Create = /** @class */ (function () {
                     case 2:
                         packageManager = _a.sent();
                         this.config.projectName = this.projectName;
-                        this.config.branch = 'master';
                         this.config.template = conf.repositories;
                         this.config.pkgManager = packageManager.pkgManager;
+                        this.rmGitFile(gitTmpDir);
+                        if (!fs.pathExistsSync(this.projectPath)) {
+                            fs.mkdirpSync(this.projectPath);
+                        }
+                        // 将项目从临时目录复制到真实的项目目录
+                        utils_1.copyFilesToTargetPath(utils_1.copyFileList(gitTmpDir), this.projectPath);
                         return [4 /*yield*/, this.patchProject()];
                     case 3:
                         _a.sent();
                         this.installDependencies(packageManager.pkgManager);
-                        this.rmGitFile();
                         return [2 /*return*/];
                 }
             });
         });
     };
-    Create.prototype.rmGitFile = function () {
-        shell.rm('-rf', path.join(this.projectPath, '.git'));
+    Create.prototype.rmGitFile = function (rootPath) {
+        shell.rm('-rf', path.join(rootPath, '.git'));
     };
     // 从下载下来的项目中获取扩展配置
     Create.prototype.getExtendConfigFromProject = function () {
@@ -183,6 +192,8 @@ var Create = /** @class */ (function () {
                         return [4 /*yield*/, this.dc.getData(promptList)];
                     case 1:
                         config = _a.sent();
+                        this.config.branch = config.branch;
+                        utils_1.switchGitBranch(projectRoot, config.branch);
                         this.mergeOption(config);
                         return [2 /*return*/];
                 }

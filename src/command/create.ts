@@ -1,4 +1,4 @@
-import { pkgManagers } from "../config";
+import { pkgManagers, tmpDir } from "../config";
 import {
     Config,
     DataCollection,
@@ -8,6 +8,8 @@ import {
 import { log, successMsgStyle } from "../utils/logger";
 import { failSpinner, logWithSpinner, stopSpinner } from "../utils/spinner";
 import {
+    copyFileList,
+    copyFilesToTargetPath,
     getGitBranchList,
     installDependencies,
     keywordWhite,
@@ -63,17 +65,23 @@ export class Create {
             return;
         }
 
-        if (!fs.pathExistsSync(this.projectPath)) {
-            fs.mkdirpSync(this.projectPath);
+        const gitTmpDir = `${tmpDir}/${this.projectName}`;
+
+
+        if (!fs.pathExistsSync(gitTmpDir)) {
+            fs.mkdirpSync(gitTmpDir);
+        } else {
+            shell.rm("-rf", `${gitTmpDir}`)
+            fs.mkdirpSync(gitTmpDir);
         }
 
-        const res = shell.cd(this.projectPath).exec(`git clone ${ conf.repositories } .`);
+        const res = shell.cd(gitTmpDir).exec(`git clone ${ conf.repositories } .`);
         if (res.code !== 0) {
             failSpinner(`克隆模版项目[${ conf.name }]失败`);
             // @ts-ignore
             process.exit(0);
         }
-        await this.resolveBranchList(this.projectPath);
+        await this.resolveBranchList(gitTmpDir);
         const promptList: PromptListItem[] = [
             {
                 type: "list",
@@ -85,20 +93,28 @@ export class Create {
 
         const packageManager = await this.dc.getData(promptList);
         this.config.projectName = this.projectName;
-        this.config.branch = 'master';
         this.config.template = conf.repositories;
         this.config.pkgManager = packageManager.pkgManager;
+
+        this.rmGitFile(gitTmpDir);
+
+
+        if (!fs.pathExistsSync(this.projectPath)) {
+            fs.mkdirpSync(this.projectPath);
+        }
+
+        // 将项目从临时目录复制到真实的项目目录
+        copyFilesToTargetPath(copyFileList(gitTmpDir), this.projectPath);
 
         await this.patchProject();
 
         this.installDependencies(packageManager.pkgManager);
 
-        this.rmGitFile();
 
     }
 
-    private rmGitFile(){
-        shell.rm('-rf', path.join(this.projectPath, '.git'));
+    private rmGitFile(rootPath: string){
+        shell.rm('-rf', path.join(rootPath, '.git'));
     }
 
     // 从下载下来的项目中获取扩展配置
@@ -143,6 +159,8 @@ export class Create {
             }
         ];
         const config = await this.dc.getData(promptList);
+        this.config.branch = config.branch;
+        switchGitBranch(projectRoot, config.branch);
         this.mergeOption(config);
     }
 

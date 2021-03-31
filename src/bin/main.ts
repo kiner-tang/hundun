@@ -8,6 +8,7 @@ import { List } from "../command/list";
 import { fetchTplConfig } from "../utils/utils";
 import { Add } from "../command/add";
 import { Remove } from "../command/remove";
+import { Init } from "../command/init";
 const pkg = require("../../package.json");
 
 
@@ -41,6 +42,13 @@ command
         new Create(alias, projectName);
     });
 command
+    .command("init")
+    .description("初始化创建一个项目")
+    .alias("i")
+    .action(async() => {
+        new Init();
+    });
+command
     .command("list")
     .description("列出所有项目模版")
     .alias("l")
@@ -51,7 +59,7 @@ command
 command
     .command("clear")
     .description("清理缓存")
-    .alias("c")
+    .alias("C")
     .action(async() => {
         new Clear();
     });

@@ -51,6 +51,7 @@ export class DataCollection {
     constructor(private dataSource: DataSource = DataSource.commandLine) {
 
     }
+
     public async getData(promptList: PromptListItem[]): Promise<Config> {
         if (this.dataSource === DataSource.commandLine) {
             return DataCollection.commandLineDataCollector(promptList);

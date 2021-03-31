@@ -1,14 +1,13 @@
 import chalk from "chalk";
 
-import { tmpDir, tplConfigFilePath, tplConfigGitLabUrl } from "../config";
-import { ChoicesListItem, Config } from "../lib/DataCollection";
+import { tmpDir } from "../config";
+import { Config } from "../lib/DataCollection";
 
 import { log } from "./logger";
 import { ConfigStruct, confName } from "../command/add";
 
 const fs = require("fs-extra");
 
-const os = require("os");
 const shell = require("shelljs");
 const path = require("path");
 
@@ -54,8 +53,7 @@ export function patchPackageJSON(
     originalPackage: Record<string, any>,
     config: Config, extra: (pkg: Record<string, any>) => void
 ): void {
-    const realProjectName = config.sourceProjectName === "." ? "" : config.projectName;
-    const projectPath = path.join(projectRoot, realProjectName);
+    const projectPath = projectRoot;
     try {
         originalPackage.name = config.projectName;
         originalPackage.tplVersion = config.branch;
@@ -90,8 +88,7 @@ export function patchConf(
     config: Config,
     updateConf: Record<string, any>
 ): void {
-    const realProjectName = config.sourceProjectName === "." ? "" : config.projectName;
-    const projectPath = path.join(projectRoot, realProjectName);
+    const projectPath = projectRoot;
     const fileList = Object.keys(updateConf);
     const args: Record<string, any> = config;
     Object.keys(updateConf).forEach((argsName: string) => {
@@ -136,31 +133,6 @@ export async function installDependencies(projectRoot: string, pkgManager: strin
         }
     });
 
-}
-
-export async function downloadDirFromGitLab(
-    gitUrl: string,
-    targetUrl: string,
-    targetDir: string,
-    branch = "master"
-): Promise<void> {
-    if (os.type() === "Windows_NT") {
-        try {
-            shell.exec(
-                `${ path.resolve(__dirname, "../supports/downloadDirFromGitLab.cmd") } ${ gitUrl } ${ targetUrl } ${ targetDir } ${ branch }`,
-                { silent: true }
-                );
-        } catch (e) {
-            console.warn("执行cmd命令失败：", e);
-        }
-
-    } else {
-        // 不支持提示
-        shell.exec(
-            `bash ${ path.resolve(__dirname, "../supports/downloadDirFromGitLab.sh") } ${ gitUrl } ${ targetUrl } ${ targetDir } ${ branch }`,
-            { silent: true }
-            );
-    }
 }
 
 export async function fetchTplConfig(): Promise<ConfigStruct[]> {

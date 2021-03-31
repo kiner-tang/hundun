@@ -44,6 +44,7 @@ var list_1 = require("../command/list");
 var utils_1 = require("../utils/utils");
 var add_1 = require("../command/add");
 var remove_1 = require("../command/remove");
+var init_1 = require("../command/init");
 var pkg = require("../../package.json");
 command
     .version(pkg.version);
@@ -80,6 +81,16 @@ command
     });
 }); });
 command
+    .command("init")
+    .description("初始化创建一个项目")
+    .alias("i")
+    .action(function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        new init_1.Init();
+        return [2 /*return*/];
+    });
+}); });
+command
     .command("list")
     .description("列出所有项目模版")
     .alias("l")
@@ -97,7 +108,7 @@ command
 command
     .command("clear")
     .description("清理缓存")
-    .alias("c")
+    .alias("C")
     .action(function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         new clear_1.Clear();

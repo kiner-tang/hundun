@@ -1,14 +1,13 @@
 import chalk from "chalk";
 
-import { tmpDir, tplConfigFilePath, tplConfigGitLabUrl } from "../config";
-import { ChoicesListItem, Config } from "../lib/DataCollection";
+import { tmpDir } from "../config";
+import { Config } from "../lib/DataCollection";
 
 import { log } from "./logger";
 import { ConfigStruct, confName } from "../command/add";
 
 const fs = require("fs-extra");
 
-const os = require("os");
 const shell = require("shelljs");
 const path = require("path");
 

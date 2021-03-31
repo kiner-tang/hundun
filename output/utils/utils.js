@@ -45,7 +45,6 @@ var config_1 = require("../config");
 var logger_1 = require("./logger");
 var add_1 = require("../command/add");
 var fs = require("fs-extra");
-var os = require("os");
 var shell = require("shelljs");
 var path = require("path");
 function keyword(color) {
