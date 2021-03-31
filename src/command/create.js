@@ -86,6 +86,9 @@ var Create = /** @class */ (function () {
                     case 0:
                         this.projectPath = path.join(this.projectPath, this.projectName);
                         conf = add_1.Add.getConfByAlia(this.alias);
+                        if (this.projectName === ".") {
+                            this.projectName = shell.pwd().replace(/(.*)\/([^\/]*)$/, '$2');
+                        }
                         this.config.projectName = this.projectName;
                         if (!conf) {
                             logger_1.log.error("\u547D\u4EE4\uFF1A" + this.alias + "\u4E0D\u5B58\u5728");

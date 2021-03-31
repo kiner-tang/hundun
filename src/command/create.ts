@@ -58,7 +58,13 @@ export class Create {
 
         this.projectPath = path.join(this.projectPath, this.projectName);
         const conf = Add.getConfByAlia(this.alias);
+
+        if(this.projectName === ".") {
+            this.projectName = shell.pwd().replace(/(.*)\/([^\/]*)$/,'$2');
+        }
+
         this.config.projectName = this.projectName;
+
 
         if (!conf) {
             log.error(`命令：${ this.alias }不存在`);
@@ -105,6 +111,7 @@ export class Create {
 
         // 将项目从临时目录复制到真实的项目目录
         copyFilesToTargetPath(copyFileList(gitTmpDir), this.projectPath);
+
 
         await this.patchProject();
 

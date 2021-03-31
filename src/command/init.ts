@@ -34,7 +34,7 @@ export class Init {
         const namePrompt: PromptListItem[] = [
             {
                 type: "input",
-                message: "请输入要创建的项目名称",
+                message: "请输入要创建的项目名称(输入.代表在当前目录创建项目)",
                 name: "name",
                 default: tpl.tpl.replace('-tpl','')
             }
